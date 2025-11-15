@@ -73,7 +73,8 @@ That successfully authenticated as a **superadmin** and revealed the final flag:
 
 
 
-![Pasted image 20251115184424.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115184424.png)
+![Pasted image 2020251115202424.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115202424.png)
+
 
 ---
 
