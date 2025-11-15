@@ -53,7 +53,7 @@ This worked and, in its response, **leaked the names of all _other_ active servi
     - **Result:** `{"success": true, "message": "Profile updated successfully"}`.
         
     - **Vulnerability:** The API insecurely allowed us to set our own admin status. We were now an application-level admin.
-![[Pasted image 20251115181842.png]]
+    - ![My Admin Panel Screenshot](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115181842.png)
 ![[Pasted image 20251115181901.png]]
         
 - **Find Insecure Deserialization (RCE):** Now as an admin, we re-tried the `BackupService`, specifically the `RestoreBackup` function. We sent junk data to see how it would fail.
