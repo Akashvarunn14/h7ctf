@@ -5,7 +5,7 @@ This repository contains a detailed, step-by-step writeup for the H7Corp (b2r) m
 ## 📝 The Writeup
 
 The full writeup can be found in the file:
-* [**H7CTF- b2r writeup.md**](H7CTF-b2r%20writeup.md)
+* [**H7CTF- b2r writeup.md**](H7CTF-%20b2r%20writeup.md)
 
 This writeup covers the entire process, from initial enumeration to rooting the machine, including:
 * **Information Disclosure** via an exposed `.git` directory
