@@ -54,24 +54,23 @@ This worked and, in its response, **leaked the names of all _other_ active servi
         
     - **Vulnerability:** The API insecurely allowed us to set our own admin status. We were now an application-level admin.
     - ![My Admin Panel Screenshot](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115181842.png)
-![[Pasted image 20251115181901.png]]
+![Pasted image 20251115181901.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115181901.png)
         
 - **Find Insecure Deserialization (RCE):** Now as an admin, we re-tried the `BackupService`, specifically the `RestoreBackup` function. We sent junk data to see how it would fail.
     
     - **Result:** `{"message": "Restore failed: unpickling stack underflow"}`.
         
     - **Vulnerability:** This error message was the key. It confirmed the server was using Python's `pickle` module, which is notoriously vulnerable to Remote Code Execution (RCE).
-    - ![[Pasted image 20251115182104.png]]
+    - ![Pasted image 20251115182104.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115182104.png)
     - 
     - 
-![[Pasted image 20251115181438.png]]
-
-![[Pasted image 20251115181944.png]]
+![Pasted image 20251115181438.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115181438.png)
+![Pasted image 20251115181944.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115181944.png)
         
 - **Get Shell:** We crafted a Python script to create a malicious `pickle` payload that would execute a reverse shell. We sent this as the `backup_data` and successfully received a reverse shell as the `svc-runtime` user.
 - 
 **Local Enumeration and User Flag** On the server as `svc-runtime`, we read the application source code at `/opt/cpr/app/server.py`. This file contained the hardcoded user flag: **`FLAG_1 = "H7CTF{d1d_y0u_l3arn_ab0ut_pr0t0buf_inject10ns}"`**.
-![[Pasted image 20251115182207.png]]
+[Pasted image 20251115182207.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115182207.png)
 Our goal was now root. After checking common vectors (`sudo -l`, `crontab`, `getcap`), we found two critical clues:
 
 1. **Root Service:** A Unix socket existed at `/run/cpr-admin.sock`.
@@ -88,22 +87,23 @@ The real vector was a SUID binary.
 - **Vector:** `find / -user abu` revealed that `abu` owned a SUID binary: `/usr/local/bin/cpr-backup`. This meant the program would run with `abu`'s permissions.
     
 - **Vulnerability:** `strings` on the binary revealed it was vulnerable to command injection: `cd %s && tar -czf %s/%s.tar.gz . 2>/dev/null`.
-- ![[Pasted image 20251115182421.png]]
+  ![Pasted image 20251115182421.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115182421.png)
 After several failed attempts due to shell syntax errors (`Bad fd number`), we crafted the correct payload. This payload uses a semicolon to start a new command, double quotes to correctly pass the reverse shell string to `bash -c`, and a `#` to comment out the rest of the original command
-![[Pasted image 20251115183130.png]]
-![[Pasted image 20251115183136.png]]
+  ![Pasted image 20251115183130.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115183130.png)
+![Pasted image 20251115183136.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115183136.png)
 
 The SUID binary (running as `abu`) executed our payload, and we received a new shell as the `abu` user.
 **Insecure Privileged Service (Root)** Now as `abu`, we were in the `platform-admins` group and had permission to access the root socket.
 
 
 1**File Transfer:** We transferred the `grpcurl` binary and the `internal.proto` file to the `/tmp` directory.
- ![[Pasted image 20251115183742.png]]
- ![[Pasted image 20251115183759.png]]
- ![[Pasted image 20251115183944.png]]
+ ![Pasted image 20251115183742.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115183742.png)
+ ![[Pasted image 20251115183759.png]]  
+(https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115183759.png)
+ ![[Pasted image 20251115183944.png]](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115183944.png)
     
 . **Exploit:** We used `grpcurl` to connect to the Unix socket and call the `AdminService.ExecuteCommand` function. We fixed a final `Bad fd number` error by using double quotes for our payload.
-![[Pasted image 20251115184047.png]]
+![Pasted image 20251115184047.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115184047.png)
 
 
 - **Success:** The `AdminService` (running as root) executed our payload. We received a connection on port 4447, and we were **root**.
@@ -116,9 +116,9 @@ The SUID binary (running as `abu`) executed our payload, and we received a new s
 
 
 
-![[Pasted image 20251115184813.png]]
+![Pasted image 20251115184813.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115184813.png)
 
-![[Pasted image 20251108200239.png]]
+![Pasted image 20251108200239.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251108200239.png)
 
 
 
@@ -127,7 +127,7 @@ THE FINAL PIC OF WHAT IT LOOKED LIKE
 
 
 
-![[Pasted image 20251115184029.png]]
+![Pasted image 20251115184029.png](https://raw.githubusercontent.com/Akashvarunn14/H7ctf/main/assets/Pasted%20image%2020251115184029.png)
 
 
 I tried to cover up what all i did to pwn this hope this helps!
